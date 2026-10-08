@@ -14,12 +14,42 @@
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     }
-    .form-group { margin-bottom: 20px; }
-    .form-group label { display: block; font-weight: bold; margin-bottom: 8px; }
-    .form-group input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; box-sizing: border-box; }
-    .submit-btn { width: 100%; background: #111; color: #fff; padding: 14px; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
-    .submit-btn:disabled { background: #888; cursor: not-allowed; }
-    #statusMsg { margin-top: 15px; font-weight: bold; text-align: center; }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+    .submit-btn {
+      width: 100%;
+      background: #111;
+      color: #fff;
+      padding: 14px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .submit-btn:disabled {
+      background: #888;
+      cursor: not-allowed;
+    }
+    #statusMsg {
+      margin-top: 15px;
+      font-weight: bold;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -69,10 +99,12 @@
   </div>
 </div>
 
+<!-- Supabase Library -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://amccedlicdnyulaesqdw.supabase.co";
-  const SUPABASE_KEY = "EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFtY2NlZGxpY2RueXVsYWVzcWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NzI1NjAsImV4cCI6MjEwNzA0ODU2MH0.xtle9ghaER6U22ttQImeJVgHHFivmJDJswbdI6SK66k";
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFtY2NlZGxpY2RueXVsYWVzcWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NzI1NjAsImV4cCI6MjEwNzA0ODU2MH0.xtle9ghaER6U22ttQImeJVgHHFivmJDJswbdI6SK66k";
+
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   const form = document.getElementById("addSareeForm");
@@ -98,6 +130,7 @@
       statusMsg.style.color = "#333";
       statusMsg.innerText = "Uploading image...";
 
+      // 1. Image Upload to Supabase Storage
       const fileExt = file.name.split('.').pop();
       const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
 
@@ -108,6 +141,7 @@
 
       if (uploadError) throw uploadError;
 
+      // 2. Get Public Image URL
       const { data: publicUrlData } = supabaseClient
         .storage
         .from('saree-images')
@@ -117,6 +151,7 @@
 
       statusMsg.innerText = "Saving saree details...";
 
+      // 3. Save into Supabase Database
       const { error: insertError } = await supabaseClient
         .from('products')
         .insert([
