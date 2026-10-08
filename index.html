@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Saree Shop — इंस्टाग्राम वाली साड़ियाँ</title>
+<title>Saree Shop - As Seen on Instagram</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;600&family=Marcellus&display=swap" rel="stylesheet">
@@ -19,16 +19,16 @@
 
 <main class="wrap">
   <section class="hero">
-    <h1>रील में जो साड़ी देखी, उसका लिंक यहाँ है</h1>
-    <p>इंस्टाग्राम पर जो साड़ियाँ मैंने पहनीं, सब यहाँ हैं। पसंद आए तो सीधे खरीदें।</p>
+    <h1>Saw it in a reel? The link is right here</h1>
+    <p>Every saree I wear on Instagram is listed here. Found one you love? Shop it directly.</p>
   </section>
 
-  <div class="chips" id="chips" role="group" aria-label="कैटेगरी"></div>
-  <div class="grid" id="grid" aria-live="polite"><p class="msg">साड़ियाँ लोड हो रही हैं…</p></div>
+  <div class="chips" id="chips" role="group" aria-label="Categories"></div>
+  <div class="grid" id="grid" aria-live="polite"><p class="msg">Loading sarees...</p></div>
 </main>
 
 <footer>
-  <div class="wrap">इन लिंक्स से खरीदारी करने पर मुझे छोटा कमीशन मिल सकता है। आपकी कीमत पर कोई फर्क नहीं पड़ता।</div>
+  <div class="wrap">I may earn a small commission when you buy through these links. It does not change the price you pay.</div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -36,7 +36,7 @@
 <script>
 const grid = document.getElementById("grid");
 const chips = document.getElementById("chips");
-let all = [], active = "सभी";
+let all = [], active = "All";
 
 function showMsg(t){ grid.innerHTML=""; const p=document.createElement("p"); p.className="msg"; p.textContent=t; grid.appendChild(p); }
 
@@ -44,7 +44,7 @@ function renderChips(){
   const cats = [...new Set(all.map(p => (p.category||"").trim()).filter(Boolean))];
   chips.innerHTML = "";
   if (!cats.length) return;
-  ["सभी", ...cats].forEach(c => {
+  ["All", ...cats].forEach(c => {
     const b = document.createElement("button");
     b.className = "chip"; b.textContent = c;
     b.setAttribute("aria-pressed", c === active);
@@ -54,8 +54,8 @@ function renderChips(){
 }
 
 function renderGrid(){
-  const list = active === "सभी" ? all : all.filter(p => (p.category||"").trim() === active);
-  if (!list.length) return showMsg("अभी कोई साड़ी नहीं है।");
+  const list = active === "All" ? all : all.filter(p => (p.category||"").trim() === active);
+  if (!list.length) return showMsg("No sarees yet.");
   grid.innerHTML = "";
   list.forEach(p => {
     const card = document.createElement("article"); card.className = "card";
@@ -72,7 +72,7 @@ function renderGrid(){
       info.appendChild(pr);
     }
     const buy = document.createElement("div"); buy.className = "buy";
-    const a = document.createElement("a"); a.className = "btn"; a.textContent = "खरीदें";
+    const a = document.createElement("a"); a.className = "btn"; a.textContent = "Shop now";
     a.href = safeUrl(p.affiliate_link); a.target = "_blank"; a.rel = "noopener noreferrer sponsored";
     buy.appendChild(a); info.appendChild(buy);
     card.append(ph, info); grid.appendChild(card);
@@ -81,7 +81,7 @@ function renderGrid(){
 
 (async () => {
   const { data, error } = await db.from("products").select("*").order("created_at", { ascending:false });
-  if (error) { console.error(error); return showMsg("साड़ियाँ लोड नहीं हो पाईं। थोड़ी देर बाद फिर कोशिश करें।"); }
+  if (error) { console.error(error); return showMsg("Could not load sarees. Please try again in a moment."); }
   all = data || [];
   renderChips(); renderGrid();
 })();
