@@ -102,7 +102,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://amccedlicdnyulaesqdw.supabase.co";
-  const SUPABASE_KEY = "Sb_publishable_CYRf_kgkkeGsJLFZgO9Djw_7Fq2GoHc";
+  const SUPABASE_KEY = "EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFtY2NlZGxpY2RueXVsYWVzcWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NzI1NjAsImV4cCI6MjEwNzA0ODU2MH0.xtle9ghaER6U22ttQImeJVgHHFivmJDJswbdI6SK66k";
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   const form = document.getElementById("addSareeForm");
@@ -129,7 +129,7 @@
       statusMsg.style.color = "#333";
       statusMsg.innerText = "Uploading image...";
 
-      // 1. Image को Supabase Storage ('saree-images') में अपलोड करें
+      // 1. Image Upload
       const fileExt = file.name.split('.').pop();
       const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
       const filePath = `${fileName}`;
@@ -141,7 +141,7 @@
 
       if (uploadError) throw uploadError;
 
-      // 2. Uploaded image का Public URL लें
+      // 2. Public URL
       const { data: publicUrlData } = supabaseClient
         .storage
         .from('saree-images')
@@ -151,7 +151,7 @@
 
       statusMsg.innerText = "Saving saree details...";
 
-      // 3. Products टेबल में डेटा इन्सर्ट करें
+      // 3. Database Insert
       const { error: insertError } = await supabaseClient
         .from('products')
         .insert([
