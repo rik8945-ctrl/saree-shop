@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Admin — Saree Shop</title>
+<title>Admin - Saree Shop</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;600&family=Marcellus&display=swap" rel="stylesheet">
@@ -15,39 +15,39 @@
   <div class="wrap">
     <span class="brand">Admin</span>
     <span>
-      <a class="link" href="index.html">दुकान देखें</a>
-      <a class="link hidden" id="logoutLink" href="#" style="margin-left:14px">लॉग आउट</a>
+      <a class="link" href="index.html">View shop</a>
+      <a class="link hidden" id="logoutLink" href="#" style="margin-left:14px">Log out</a>
     </span>
   </div>
 </header>
 
 <main class="wrap">
   <section class="panel" id="loginBox">
-    <h2>लॉग इन</h2>
+    <h2>Log in</h2>
     <form id="loginForm">
-      <div class="field"><label for="email">ईमेल</label><input id="email" type="email" required autocomplete="username"></div>
-      <div class="field"><label for="password">पासवर्ड</label><input id="password" type="password" required autocomplete="current-password"></div>
-      <button class="btn" id="loginBtn" type="submit">लॉग इन करें</button>
+      <div class="field"><label for="email">Email</label><input id="email" type="email" required autocomplete="username"></div>
+      <div class="field"><label for="password">Password</label><input id="password" type="password" required autocomplete="current-password"></div>
+      <button class="btn" id="loginBtn" type="submit">Log in</button>
       <p class="status" id="loginStatus"></p>
     </form>
   </section>
 
   <div id="adminBox" class="hidden">
     <section class="panel">
-      <h2>नई साड़ी जोड़ें</h2>
+      <h2>Add a new saree</h2>
       <form id="addForm">
-        <div class="field"><label for="name">साड़ी का नाम</label><input id="name" required placeholder="जैसे: बनारसी सिल्क साड़ी"></div>
-        <div class="field"><label for="price">कीमत (₹)</label><input id="price" type="number" min="0" inputmode="numeric" placeholder="1499"></div>
-        <div class="field"><label for="image">फोटो</label><input id="image" type="file" accept="image/*" required></div>
-        <div class="field"><label for="link">एफिलिएट / खरीदने का लिंक</label><input id="link" type="url" required placeholder="https://..."></div>
-        <div class="field"><label for="category">कैटेगरी</label><input id="category" list="cats" placeholder="सिल्क, कॉटन, पार्टी वियर"><datalist id="cats"></datalist></div>
-        <button class="btn" id="addBtn" type="submit">साड़ी जोड़ें</button>
+        <div class="field"><label for="name">Saree name</label><input id="name" required placeholder="e.g. Banarasi Silk Saree"></div>
+        <div class="field"><label for="price">Price (₹)</label><input id="price" type="number" min="0" inputmode="numeric" placeholder="1499"></div>
+        <div class="field"><label for="image">Photo</label><input id="image" type="file" accept="image/*" required></div>
+        <div class="field"><label for="link">Affiliate / buy link</label><input id="link" type="url" required placeholder="https://..."></div>
+        <div class="field"><label for="category">Category</label><input id="category" list="cats" placeholder="Silk, Cotton, Party Wear"><datalist id="cats"></datalist></div>
+        <button class="btn" id="addBtn" type="submit">Add saree</button>
         <p class="status" id="addStatus"></p>
       </form>
     </section>
 
     <section class="panel">
-      <h2>जोड़ी हुई साड़ियाँ</h2>
+      <h2>Added sarees</h2>
       <div id="list"></div>
     </section>
   </div>
@@ -70,10 +70,10 @@ async function checkSession(){
 
 $("loginForm").addEventListener("submit", async e => {
   e.preventDefault();
-  $("loginBtn").disabled = true; setStatus($("loginStatus"), "जाँच रहे हैं…");
+  $("loginBtn").disabled = true; setStatus($("loginStatus"), "Checking...");
   const { error } = await db.auth.signInWithPassword({ email:$("email").value.trim(), password:$("password").value });
   $("loginBtn").disabled = false;
-  if (error) return setStatus($("loginStatus"), "ईमेल या पासवर्ड गलत है।", "err");
+  if (error) return setStatus($("loginStatus"), "Wrong email or password.", "err");
   setStatus($("loginStatus"), ""); checkSession();
 });
 
@@ -98,17 +98,17 @@ function shrink(file, max = 1200){
 $("addForm").addEventListener("submit", async e => {
   e.preventDefault();
   const file = $("image").files[0];
-  if (!file) return setStatus($("addStatus"), "पहले फोटो चुनें।", "err");
+  if (!file) return setStatus($("addStatus"), "Choose a photo first.", "err");
   $("addBtn").disabled = true;
   try {
-    setStatus($("addStatus"), "फोटो अपलोड हो रही है…");
+    setStatus($("addStatus"), "Uploading photo...");
     const blob = await shrink(file);
     const path = `${Date.now()}_${Math.random().toString(36).slice(2)}.jpg`;
     const up = await db.storage.from(BUCKET).upload(path, blob, { contentType:"image/jpeg" });
     if (up.error) throw up.error;
     const imageUrl = db.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
 
-    setStatus($("addStatus"), "डिटेल सेव हो रही है…");
+    setStatus($("addStatus"), "Saving details...");
     const price = $("price").value.trim();
     const { error } = await db.from("products").insert([{
       name: $("name").value.trim(),
@@ -119,23 +119,23 @@ $("addForm").addEventListener("submit", async e => {
     }]);
     if (error) throw error;
 
-    setStatus($("addStatus"), "साड़ी जुड़ गई।", "ok");
+    setStatus($("addStatus"), "Saree added.", "ok");
     $("addForm").reset(); loadList();
   } catch (err) {
     console.error(err);
-    setStatus($("addStatus"), "नहीं हो पाया: " + (err.message || "अज्ञात गड़बड़"), "err");
+    setStatus($("addStatus"), "Failed: " + (err.message || "Unknown error"), "err");
   } finally { $("addBtn").disabled = false; }
 });
 
 async function loadList(){
   const { data, error } = await db.from("products").select("*").order("created_at", { ascending:false });
   const box = $("list"); box.innerHTML = "";
-  if (error) { box.textContent = "लिस्ट लोड नहीं हुई।"; return; }
+  if (error) { box.textContent = "Could not load the list."; return; }
   $("cats").innerHTML = "";
   [...new Set((data||[]).map(p => p.category).filter(Boolean))].forEach(c => {
     const o = document.createElement("option"); o.value = c; $("cats").appendChild(o);
   });
-  if (!data.length) { box.textContent = "अभी कोई साड़ी नहीं जोड़ी।"; return; }
+  if (!data.length) { box.textContent = "No sarees added yet."; return; }
   data.forEach(p => {
     const row = document.createElement("div"); row.className = "row";
     const img = document.createElement("img"); img.src = safeUrl(p.image_url); img.alt = "";
@@ -143,16 +143,16 @@ async function loadList(){
     const b = document.createElement("b"); b.textContent = p.name;
     const s = document.createElement("span"); s.textContent = [p.price != null ? "₹"+p.price : "", p.category||""].filter(Boolean).join(" • ");
     t.append(b, s);
-    const del = document.createElement("button"); del.className = "btn danger"; del.textContent = "हटाएँ";
+    const del = document.createElement("button"); del.className = "btn danger"; del.textContent = "Delete";
     del.onclick = () => removeProduct(p);
     row.append(img, t, del); box.appendChild(row);
   });
 }
 
 async function removeProduct(p){
-  if (!confirm(`"${p.name}" हटानी है?`)) return;
+  if (!confirm(`Delete "${p.name}"?`)) return;
   const { error } = await db.from("products").delete().eq("id", p.id);
-  if (error) return alert("हटा नहीं पाए: " + error.message);
+  if (error) return alert("Could not delete: " + error.message);
   const file = decodeURIComponent((p.image_url || "").split("/").pop().split("?")[0]);
   if (file) await db.storage.from(BUCKET).remove([file]);
   loadList();
