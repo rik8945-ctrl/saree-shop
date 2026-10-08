@@ -1,5 +1,5 @@
 const SUPABASE_URL = "https://amccedlicdnyulaesqdw.supabase.co";
-const SUPABASE_KEY = "EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFtY2NlZGxpY2RueXVsYWVzcWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NzI1NjAsImV4cCI6MjEwNzA0ODU2MH0.xtle9ghaER6U22ttQImeJVgHHFivmJDJswbdI6SK66k";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFtY2NlZGxpY2RueXVsYWVzcWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NzI1NjAsImV4cCI6MjEwNzA0ODU2MH0.xtle9ghaER6U22ttQImeJVgHHFivmJDJswbdI6SK66k";
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const productGrid = document.getElementById("productGrid");
