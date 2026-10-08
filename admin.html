@@ -99,7 +99,6 @@
   </div>
 </div>
 
-<!-- Supabase Library -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://amccedlicdnyulaesqdw.supabase.co";
@@ -130,7 +129,6 @@
       statusMsg.style.color = "#333";
       statusMsg.innerText = "Uploading image...";
 
-      // 1. Image Upload to Supabase Storage
       const fileExt = file.name.split('.').pop();
       const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
 
@@ -141,7 +139,6 @@
 
       if (uploadError) throw uploadError;
 
-      // 2. Get Public Image URL
       const { data: publicUrlData } = supabaseClient
         .storage
         .from('saree-images')
@@ -151,7 +148,6 @@
 
       statusMsg.innerText = "Saving saree details...";
 
-      // 3. Save into Supabase Database
       const { error: insertError } = await supabaseClient
         .from('products')
         .insert([
