@@ -1,8 +1,6 @@
-// Supabase Credentials
 const SUPABASE_URL = "https://amccedlicdnyulaesqdw.supabase.co";
 const SUPABASE_KEY = "EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFtY2NlZGxpY2RueXVsYWVzcWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NzI1NjAsImV4cCI6MjEwNzA0ODU2MH0.xtle9ghaER6U22ttQImeJVgHHFivmJDJswbdI6SK66k";
 
-// Supabase Client Initialize
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const productGrid = document.getElementById("productGrid");
 
@@ -15,14 +13,10 @@ async function loadProducts() {
       .select("*")
       .order("created_at", { ascending: false });
 
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
 
     if (!products || products.length === 0) {
-      productGrid.innerHTML = `
-        <p class="empty">No sarees available yet.</p>
-      `;
+      productGrid.innerHTML = `<p class="empty">No sarees available yet.</p>`;
       return;
     }
 
@@ -56,9 +50,7 @@ async function loadProducts() {
     });
   } catch (err) {
     console.error("Error loading products:", err);
-    productGrid.innerHTML = `
-      <p class="empty">Failed to load sarees. Please check configuration.</p>
-    `;
+    productGrid.innerHTML = `<p class="empty">Failed to load sarees. Please check configuration.</p>`;
   }
 }
 
