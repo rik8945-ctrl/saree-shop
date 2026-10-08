@@ -1,6 +1,6 @@
 // Supabase Credentials
 const SUPABASE_URL = "https://amccedlicdnyulaesqdw.supabase.co";
-const SUPABASE_KEY = "Sb_publishable_CYRf_kgkkeGsJLFZgO9Djw_7Fq2GoHc";
+const SUPABASE_KEY = "EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFtY2NlZGxpY2RueXVsYWVzcWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0NzI1NjAsImV4cCI6MjEwNzA0ODU2MH0.xtle9ghaER6U22ttQImeJVgHHFivmJDJswbdI6SK66k";
 
 // Supabase Client Initialize
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -10,7 +10,6 @@ async function loadProducts() {
   if (!productGrid) return;
 
   try {
-    // Supabase की products टेबल से डेटा फेच करें
     const { data: products, error } = await supabaseClient
       .from("products")
       .select("*")
@@ -22,9 +21,7 @@ async function loadProducts() {
 
     if (!products || products.length === 0) {
       productGrid.innerHTML = `
-        <p class="empty">
-          No sarees available yet.
-        </p>
+        <p class="empty">No sarees available yet.</p>
       `;
       return;
     }
@@ -41,16 +38,9 @@ async function loadProducts() {
           alt="${escapeHtml(product.name)}"
           loading="lazy"
         >
-
         <div class="product-info">
-          <h3>
-            ${escapeHtml(product.name)}
-          </h3>
-
-          <div class="product-price">
-            ₹${escapeHtml(product.price)}
-          </div>
-
+          <h3>${escapeHtml(product.name)}</h3>
+          <div class="product-price">₹${escapeHtml(product.price)}</div>
           <a
             class="shop-now"
             href="${escapeHtml(product.affiliate_link)}"
@@ -67,9 +57,7 @@ async function loadProducts() {
   } catch (err) {
     console.error("Error loading products:", err);
     productGrid.innerHTML = `
-      <p class="empty">
-        Failed to load sarees. Please check configuration.
-      </p>
+      <p class="empty">Failed to load sarees. Please check configuration.</p>
     `;
   }
 }
@@ -84,5 +72,4 @@ function escapeHtml(value) {
     .replace(/'/g, "&#039;");
 }
 
-// पेज लोड होते ही प्रोडक्ट्स लाएं
 loadProducts();
